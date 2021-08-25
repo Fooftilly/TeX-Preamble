@@ -1,0 +1,71 @@
+\usepackage[serbian, serbianc]{babel}
+\usepackage{fontspec}
+\setmainfont{FreeSerif}
+\setsansfont{FreeSans}
+\setmonofont{FreeMono}
+
+\usepackage{ragged2e}
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=99999 %This removes badness error messages.
+
+\usepackage{graphicx}
+\usepackage{footmisc}%This packages enables the use of * for footnote on the first page
+
+%The package hyperref should be loaded close to last or last because some other packages can overwrite it. Sometimes csquotes can cause problem if it is loaded before hyperref
+\usepackage[hidelinks,pdfa=true,bookmarks,hyperindex=true,]{hyperref}
+\hypersetup{
+	%backref=page,
+	pdftitle={},    % title
+	pdfauthor={Nikola Perović},     % author
+	pdfsubject={},   % subject of the document
+	pdfkeywords={} {} {}, % list of keywords
+	pdflang=sr,
+	colorlinks,
+	allcolors=black
+}
+
+\usepackage[bibencoding=auto,backend=biber,autolang=other,style=authoryear]{biblatex}
+\usepackage[autostyle]{csquotes}
+\bibliography{ref}
+\renewcommand*{\postnotedelim}{\addcolon\space} % add colon after year while \parencite
+\DeclareFieldFormat{postnote}{#1} %no page prefix while citing
+\DeclareFieldFormat{multipostnote}{#1} %no page prefix while citing
+\renewcommand*{\nameyeardelim}{\addcomma\space} %comma after the author
+
+%This add dots in table of contents. Uncomment lines which you need to add dots on. Every line can not be uncommented because some comands are not present in every document. Example: chapters are not present in \documentclass{article}
+\usepackage{tocloft}
+\renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}} % for parts
+%\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} % for chapters
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % for sections, if you really want! (It is default in report and book class (So you may not need it).
+
+%This long code bellow removes the dot after the year on the \parencite
+\DefineBibliographyExtras{serbian}{%
+  \renewcommand*\mkbibordinal[1]{\stripzeros{#1}}
+  \renewcommand*\mkbibdateshort[3]{%
+    \iffieldundef{#3}{}{\mkbibordinal{\thefield{#3}}%
+      \iffieldundef{#2}{}{\addnbspace}}%
+    \iffieldundef{#2}{}{\mkbibordinal{\thefield{#2}}%
+      \iffieldundef{#1}{}{\addnbspace}}%
+    \iffieldbibstring{#1}{\bibstring{\thefield{#1}}}%
+    {\dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}}%
+  \renewcommand*\mkbibseasondateshort[2]{%
+    \mkbibseason{\thefield{#2}}%
+    \iffieldundef{#1}{}{\space}%
+    \dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}%
+    \renewcommand*\mkbibseasondatelong[2]{%
+    \mkbibseason{\thefield{#2}}%
+    \iffieldundef{#1}{}{\space}%
+    \dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}%
+}
+
+\setlength{\parindent}{1em}
+\setlength{\parskip}{1em}
+\renewcommand{\baselinestretch}{1.15} %This sets line spacing
+
+%Frequently used commands and their shortcuts
+\newcommand{\pcite}{\parencite} %This makes \pcite shortcut of \parencite
+\newcommand{\enq}{\enquote} %This makes \enq shortcut of csquotes command \enquote
+
+%Redefine how bibliography looks
+\renewbibmacro{in:}{\printtext{}}%Removes U: when using @inbook in bibliography. Removes U: so it doesn't explicitly say that the title before is found in the book cited.
